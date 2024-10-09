@@ -1,6 +1,7 @@
-run = "import"
+run = "cd 'Final exam python' && python example.py"
+modules = ["python-3.11"]
 [nix]
 channel = "stable-24_05"
 
 [deployment]
-run = ["sh", "-c", "import"]
+run = ["sh", "-c", "cd 'Final exam python' && python example.py"]

@@ -1,86 +1,70 @@
 import tkinter as tk
-import random
 
-class GuessTheNumberGame:
+
+class TempatureConverter:
+
     def __init__(self, master):
         self.master = master
-        self.master.title("Guess the Number Game")
-
-       
-        self.lower_bound = 1
-        self.upper_bound = 100
-        self.guess = None
-        
-   
-        self.label = tk.Label(master, text="Computer's guess:")
-        self.label.pack(pady=10)
-
-        self.guess_label = tk.Label(master, text="")
-        self.guess_label.pack(pady=10)
+        self.instructions_window = tk.Toplevel()
+        self.master.title("Tempature Converter")
 
         self.buttons_frame = tk.Frame(master)
         self.buttons_frame.pack(pady=10)
 
-       
-        self.too_small_button = tk.Button(self.buttons_frame, text="Too small", command=self.too_small)
-        self.too_small_button.pack(side=tk.LEFT, padx=5)
+        tk.Label(self.instructions_window, text="Instructions").pack(padx=30)
+        tk.Label(self.instructions_window,
+                 text="1. Enter your temperature").pack(pady=10, padx=30)
+        tk.Label(self.instructions_window,
+                 text="2. Select the temperature scale you want to convert to"
+                 ).pack(padx=30)
 
-        self.too_large_button = tk.Button(self.buttons_frame, text="Too large", command=self.too_large)
-        self.too_large_button.pack(side=tk.LEFT, padx=5)
+        self.temp_input = tk.Entry(self.master)
+        self.temp_input.pack(pady=10, padx=30)
 
-        self.correct_button = tk.Button(self.buttons_frame, text="Correct", command=self.correct)
-        self.correct_button.pack(side=tk.LEFT, padx=5)
+        self.new_temp = tk.Label(self.master,
+                                 text="Your tempature will appear here")
+        self.new_temp.pack()
 
-        self.new_game_button = tk.Button(master, text="New Game", command=self.new_game)
-        self.new_game_button.pack(pady=20)
+        self.convert_f = tk.Button(self.buttons_frame,
+                                   text="Fahrenheit",
+                                   command=self.do_convert_f)
+        self.convert_f.pack(side=tk.LEFT, padx=5)
 
-        self.too_small_button.config(state=tk.DISABLED)
-        self.too_large_button.config(state=tk.DISABLED)
-        self.correct_button.config(state=tk.DISABLED)
-        self.new_game_button.config(state=tk.DISABLED)
+        self.convert_c = tk.Button(self.buttons_frame,
+                                   text="Celcius",
+                                   command=self.do_convert_c)
+        self.convert_c.pack(side=tk.LEFT, padx=5)
 
-        
-        self.new_game()
+        self.reset = tk.Button(self.buttons_frame,
+                               text="Reset",
+                               command=self.do_reset)
+        self.reset.pack(side=tk.LEFT, padx=5)
 
-    def new_game(self):
-      
-        self.target_number = None
-        self.lower_bound = 1
-        self.upper_bound = 100
-        self.guess = None
-        self.guess_label.config(text="")
-        self.too_small_button.config(state=tk.NORMAL)
-        self.too_large_button.config(state=tk.NORMAL)
-        self.correct_button.config(state=tk.NORMAL)
-        self.new_game_button.config(state=tk.DISABLED)
-        self.make_guess()
+    def do_convert_f(self):
+        if not self.validate_input():
+            self.new_temp.config(text="Input must be a valid number")
+        else:
+            f_temp = (9 / 5) * int(self.temp_input.get()) + 32
+            self.new_temp.config(text=str(f_temp) + "ºF")
 
-    def make_guess(self):
-        
-        self.guess = (self.lower_bound + self.upper_bound) // 2
-        self.guess_label.config(text=str(self.guess))  
+    def do_convert_c(self):
 
-    def too_small(self):
-   
-        self.lower_bound = self.guess + 1
-        self.make_guess()  
+        if not self.validate_input():
+            self.new_temp.config(text="Input must be a valid number")
+        else:
+            c_temp = (int(self.temp_input.get()) - 32) * (5 / 9)
+            self.new_temp.config(text=str(c_temp) + "ºC")
 
-    def too_large(self):
-       
-        self.upper_bound = self.guess - 1
-        self.make_guess()  
+    def do_reset(self):
+        self.temp_input.delete(0, 'end')
 
-    def correct(self):
-     
-        self.guess_label.config(text=f"Correct! The number was {self.guess}.")
-      
-        self.too_small_button.config(state=tk.DISABLED)
-        self.too_large_button.config(state=tk.DISABLED)
-        self.correct_button.config(state=tk.DISABLED)
-        self.new_game_button.config(state=tk.NORMAL)
+    def validate_input(self):
+        txt = self.temp_input.get()
+
+        return txt != '' and txt.lstrip('-').isnumeric()
 
 
 if __name__ == "__main__":
     root = tk.Tk()
-    game = GuessTheNumberGame(root)
+    game = TempatureConverter(root)
     root.mainloop()
