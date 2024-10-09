@@ -1,5 +1,5 @@
-# import tkinter as tk
-# import random
+import tkinter as tk
+import random
 
 class GuessTheNumberGame:
     def __init__(self, master):
