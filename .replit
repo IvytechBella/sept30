@@ -1,0 +1,6 @@
+run = "import"
+[nix]
+channel = "stable-24_05"
+
+[deployment]
+run = ["sh", "-c", "import"]
